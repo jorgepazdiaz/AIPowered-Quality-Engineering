@@ -1,0 +1,73 @@
+name: qa
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    defaults:
+      run:
+        working-directory: playwright
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Gate 1 · tests críticos (bloqueante)
+        if: matrix.shard == 1
+        run: npx playwright test --grep @critical --project=ui --project=api
+      - name: Regresión completa (shard ${{ matrix.shard }}/3)
+        run: npx playwright test --shard=${{ matrix.shard }}/3
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.shard }}
+          path: |
+            playwright/playwright-report
+            playwright/test-results
+          retention-days: 14
+
+  triage:
+    # S21 · el agente analiza los fallos y deja el resumen como artefacto (y comentario en el PR)
+    needs: tests
+    if: ${{ failure() && vars.ENABLE_AI_TRIAGE == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: agents
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: actions/download-artifact@v4
+        with:
+          name: playwright-report-1
+          path: playwright
+      - run: npm ci
+      - run: npm run agent:triage -- ../playwright/test-results/results.json
+        env:
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      - name: Comentar en el PR
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file out/triage.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai-triage
+          path: agents/out

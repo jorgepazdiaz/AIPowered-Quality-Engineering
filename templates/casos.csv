@@ -1,0 +1,2 @@
+id,title,technique,priority,preconditions,steps,data,expected,story,risk,automate
+TC-001,"Login con usuario válido",EP,P1,"Usuario registrado","Ir a /auth/login | Ingresar email y password | Clic en Login","{""email"":""customer@practicesoftwaretesting.com""}","Redirige a /account",HU-LOGIN-01,R-01,yes

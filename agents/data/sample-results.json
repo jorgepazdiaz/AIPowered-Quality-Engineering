@@ -1,0 +1,17 @@
+{
+  "suites": [
+    { "title": "ui/login.spec.ts", "file": "tests/ui/login.spec.ts", "suites": [ { "title": "Login", "file": "tests/ui/login.spec.ts", "specs": [
+      { "title": "usuario demo inicia sesión @critical", "file": "tests/ui/login.spec.ts", "line": 6, "tests": [ { "projectName": "ui", "results": [
+        { "status": "failed", "error": { "message": "Error: expect(page).toHaveURL(expected)\nExpected pattern: /\\/account/\nReceived string: \"https://practicesoftwaretesting.com/auth/login\"\nCall log: waiting for navigation" } },
+        { "status": "failed", "error": { "message": "Error: expect(page).toHaveURL(expected)\nExpected pattern: /\\/account/\nReceived string: \"https://practicesoftwaretesting.com/auth/login\"" } } ] } ] } ] } ] },
+    { "title": "ui/cart.spec.ts", "file": "tests/ui/cart.spec.ts", "specs": [
+      { "title": "agregar un producto al carrito actualiza el contador @critical", "file": "tests/ui/cart.spec.ts", "line": 4, "tests": [ { "projectName": "ui", "results": [
+        { "status": "timedOut", "error": { "message": "Test timeout of 30000ms exceeded.\nwaiting for getByTestId('cart-quantity')" } },
+        { "status": "passed" } ] } ] } ] },
+    { "title": "api/products.spec.ts", "file": "tests/api/products.spec.ts", "specs": [
+      { "title": "lista productos paginados @critical", "file": "tests/api/products.spec.ts", "line": 4, "tests": [ { "projectName": "api", "results": [
+        { "status": "failed", "error": { "message": "Error: expect(received).toBe(expected)\nExpected: 200\nReceived: 503" } } ] } ] },
+      { "title": "búsqueda por término", "file": "tests/api/products.spec.ts", "line": 20, "tests": [ { "projectName": "api", "results": [
+        { "status": "failed", "error": { "message": "Error: expect(received).toBeTruthy()\nReceived: false\nGET https://api.practicesoftwaretesting.com/products/search -> 503 Service Unavailable" } } ] } ] } ] }
+  ]
+}

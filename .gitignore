@@ -1,0 +1,6 @@
+node_modules/
+.env
+playwright/test-results/
+playwright/playwright-report/
+agents/out/
+.DS_Store

@@ -1,0 +1,4 @@
+{
+  "tests/ui/cart.spec.ts:4:ui": ["passed", "failed", "passed", "passed", "failed", "passed"],
+  "tests/ui/login.spec.ts:6:ui": ["passed", "passed", "passed", "passed", "passed", "passed"]
+}

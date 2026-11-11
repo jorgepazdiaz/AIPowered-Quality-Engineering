@@ -1,0 +1,34 @@
+name: agente-valores-limite
+# Escalón 6: el agente corre solo cuando cambia una historia de usuario y su evaluación actúa como quality gate.
+on:
+  pull_request:
+    paths: ['agents/stories/**']
+  workflow_dispatch:
+
+jobs:
+  boundary:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agents
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm ci
+      - name: Ejecutar agente sobre cada HU modificada
+        env:
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          for f in stories/HU-*.md; do npm run -s agent:boundary -- "$f"; done
+      - name: Quality gate · evaluación contra la referencia
+        run: |
+          for f in data/reference/*.boundary.json; do id=$(basename "$f" .boundary.json); npm run -s eval:boundary -- "$id"; done
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: casos-valores-limite
+          path: agents/out

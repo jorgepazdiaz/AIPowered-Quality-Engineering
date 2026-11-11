@@ -1,0 +1,16 @@
+{
+  "story": "HU-CART-03",
+  "source": "Escalón 3 · tabla revisada en el chat y convertida a JSON con Copilot",
+  "cases": [
+    { "id": "BV-01", "field": "cantidad", "value": 0, "valid": false, "expected": "Se muestra \"Cantidad no válida\" y no se agrega", "rule": "Regla 1" },
+    { "id": "BV-02", "field": "cantidad", "value": 1, "valid": true, "expected": "Se agrega 1 unidad al carrito", "rule": "Regla 1" },
+    { "id": "BV-03", "field": "cantidad", "value": 99, "valid": true, "expected": "Se agregan 99 unidades", "rule": "Regla 1" },
+    { "id": "BV-04", "field": "cantidad", "value": 100, "valid": false, "expected": "Se muestra \"Cantidad no válida\"", "rule": "Regla 1" },
+    { "id": "BV-05", "field": "subtotal", "value": 49.99, "valid": false, "expected": "Se muestra \"Monto mínimo para cupón: 50.00 USD\"", "rule": "Regla 2" },
+    { "id": "BV-06", "field": "subtotal", "value": 50.00, "valid": true, "expected": "El cupón se aplica", "rule": "Regla 2" },
+    { "id": "BV-07", "field": "longitud_cupon", "value": 5, "valid": false, "expected": "Se muestra \"Código de cupón no válido\"", "rule": "Regla 3" },
+    { "id": "BV-08", "field": "longitud_cupon", "value": 6, "valid": true, "expected": "El código se acepta", "rule": "Regla 3" },
+    { "id": "BV-09", "field": "longitud_cupon", "value": 12, "valid": true, "expected": "El código se acepta", "rule": "Regla 3" },
+    { "id": "BV-10", "field": "longitud_cupon", "value": 13, "valid": false, "expected": "Se muestra \"Código de cupón no válido\"", "rule": "Regla 3" }
+  ]
+}

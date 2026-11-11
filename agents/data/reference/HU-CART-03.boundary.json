@@ -1,0 +1,16 @@
+{
+  "story": "HU-CART-03",
+  "note": "Valores límite esperados (técnica de 2 valores), revisados por el docente.",
+  "expected": [
+    { "field": "cantidad", "value": 0, "valid": false },
+    { "field": "cantidad", "value": 1, "valid": true },
+    { "field": "cantidad", "value": 99, "valid": true },
+    { "field": "cantidad", "value": 100, "valid": false },
+    { "field": "subtotal", "value": 49.99, "valid": false },
+    { "field": "subtotal", "value": 50.00, "valid": true },
+    { "field": "longitud_cupon", "value": 5, "valid": false },
+    { "field": "longitud_cupon", "value": 6, "valid": true },
+    { "field": "longitud_cupon", "value": 12, "valid": true },
+    { "field": "longitud_cupon", "value": 13, "valid": false }
+  ]
+}

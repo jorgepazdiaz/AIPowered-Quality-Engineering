@@ -1,0 +1,12 @@
+[
+  { "title": "Aplicar cupón vigente con subtotal mayor a 50 USD" },
+  { "title": "Rechazar cupón con subtotal de 49.99 USD" },
+  { "title": "Aceptar cupón con subtotal exactamente 50.00 USD" },
+  { "title": "Rechazar cupón vencido" },
+  { "title": "Rechazar cupón agotado" },
+  { "title": "Código en minúsculas se acepta igual que en mayúsculas" },
+  { "title": "Rechazar código de 5 caracteres" },
+  { "title": "Rechazar segundo cupón en el mismo pedido" },
+  { "title": "Cliente en primera compra recibe 10% adicional" },
+  { "title": "Cupón se retira al bajar el subtotal de 50 USD" }
+]
