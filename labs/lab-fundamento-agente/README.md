@@ -123,7 +123,7 @@ Edita `.env` con **una** de estas opciones:
 # Gemini (gratis, crear clave en Google AI Studio)
 LLM_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
 LLM_API_KEY=tu_clave
-LLM_MODEL=gemini-2.5-flash      # o el modelo Flash vigente en Google AI Studio
+LLM_MODEL=gemini-3.5-flash      # modelo alternativo disponible para esta clave
 
 # Ollama local (sin enviar datos a la nube): instalar Ollama y ejecutar `ollama pull qwen2.5:7b`
 # LLM_BASE_URL=http://localhost:11434/v1
@@ -152,7 +152,7 @@ npm run agent:boundary -- stories/HU-CART-03.md
 ```
 Verás una traza parecida a esta:
 ```text
-Agente de valores límite · modelo: gemini-2.5-flash · HU: HU-CART-03
+Agente de valores límite · modelo: gemini-3.5-flash · HU: HU-CART-03
   [paso 1] readStory({})
   [paso 2] readContext({})
   [paso 3] calcBoundaries({"field":"cantidad","min":1,"max":99,"step":1})

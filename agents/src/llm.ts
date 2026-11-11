@@ -12,8 +12,9 @@ export interface ToolSchema {
   function: { name: string; description: string; parameters: Record<string, unknown> };
 }
 
-const BASE = process.env.LLM_BASE_URL ?? 'https://api.openai.com/v1';
+const BASE = (process.env.LLM_BASE_URL ?? 'https://api.openai.com/v1').replace(/\/+$/, '');
 const KEY = process.env.LLM_API_KEY ?? '';
+const TIMEOUT_MS = Math.max(1_000, Number(process.env.LLM_TIMEOUT_MS) || 30_000);
 export const MODEL = process.env.LLM_MODEL ?? 'gpt-4o-mini';
 
 export const usage = { calls: 0, promptTokens: 0, completionTokens: 0 };
@@ -33,11 +34,22 @@ export async function chat(opts: {
   if (opts.tools?.length) body.tools = opts.tools;
   if (opts.json) body.response_format = { type: 'json_object' };
 
-  const res = await fetch(`${BASE}/chat/completions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
-    body: JSON.stringify(body),
-  });
+  if (!KEY.trim()) throw new Error('LLM_API_KEY no está configurada. Revisa el archivo .env.');
+
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${KEY}` },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+  } catch (error) {
+    if (error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
+      throw new Error(`LLM: tiempo de espera agotado después de ${TIMEOUT_MS} ms. Verifica la conexión y la disponibilidad del servicio.`);
+    }
+    throw error;
+  }
   if (!res.ok) throw new Error(`LLM ${res.status}: ${await res.text()}`);
   const data = (await res.json()) as {
     choices: { message: Message }[];
